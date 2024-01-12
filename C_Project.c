@@ -5,12 +5,9 @@
 
 void generateInvoice();
 void billHeader();
-int billBody(char item[30],int qty,float price);
+void billBody(int num_of_items);
 void billfooter();
 
-    // int TBnum, itm_qty, num_of_items;
-    // char item_name[50];
-    // float itm_price;
 struct Item{
     char itm[30];
     int qty;
@@ -69,12 +66,8 @@ void generateInvoice(){
     printf("%.2f",sub_total);
     billHeader();
     for(int i=1;i<=num_of_items;i++){
-        billBody(item[i].itm,item[i].qty,item[i].price);
+        printf("\n%s\t\t\t%d\t\t%.2f",item[i].itm,item[i].qty,item[i].price);
     }
-
-    // printf("\nall food items :)");
-    // billHeader();
-    // billBody();
 }
 
 void billHeader(){//char name[50],char date[30]
@@ -96,10 +89,10 @@ void billHeader(){//char name[50],char date[30]
     
 }
 
-int billBody(char item[30],int qty,float price){
+void billBody(int num_of_items){
         // printf("\ntandoori roti\t\t4\t\t60.00");
-    printf("%s\t\t%d\t\t%.2f",item,qty,price);
-    printf("bill body");
+    // printf("bill body");
+
 }
 
 void billFooter(){
