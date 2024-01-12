@@ -5,10 +5,17 @@
 
 void generateInvoice();
 void billHeader();
-void billBody();
+int billBody(char item[30],int qty,float price);
 void billfooter();
 
-
+    // int TBnum, itm_qty, num_of_items;
+    // char item_name[50];
+    // float itm_price;
+struct Item{
+    char itm[30];
+    int qty;
+    float price;
+};
 
 int main(){
     int choice;
@@ -38,26 +45,34 @@ int main(){
 }
 
 void generateInvoice(){
-    int TBnum, itm_qty, num_of_items;
-    char item_name[50];
-    float itm_price;
-
-    printf("Enter the number of Items : ");
+    int num_of_items;
+    struct Item item[30];
+    float sub_total=0,total_incl_taxes=0;
+    printf("\nEnter the number of Items : ");
     scanf("%d",&num_of_items);
-    for(int i=0;i<num_of_items;i++){
-        printf("Enter the name of Item : ");
-        fgets(item_name,50,stdin);
-        // item_name[strlen(item_name)-1] = 0;
+
+    for(int i=1;i<=num_of_items;i++){
+        fgetc(stdin);
+        printf("\n\nEnter the name of Item %d : ",i);
+        fgets(item[i].itm,30,stdin);
+        item[i].itm[strlen(item[i].itm)-1] = 0;
 
         printf("Enter the quantity of Item : ");
-        scanf("%d",&itm_qty);
+        scanf("%d",&item[i].qty);
 
         printf("Enter the price of Item : ");
-        scanf("%f",&itm_price);
+        scanf("%f",&item[i].price);
+
+        sub_total+=(item[i].qty*item[i].price);
+
     }
-    printf("%d",itm_qty);
-    // printf("\ntandoori roti\t\t4\t\t60.00");
-    printf("\nall food items :)");
+    printf("%.2f",sub_total);
+    billHeader();
+    for(int i=1;i<=num_of_items;i++){
+        billBody(item[i].itm,item[i].qty,item[i].price);
+    }
+
+    // printf("\nall food items :)");
     // billHeader();
     // billBody();
 }
@@ -81,7 +96,9 @@ void billHeader(){//char name[50],char date[30]
     
 }
 
-void billBody(){
+int billBody(char item[30],int qty,float price){
+        // printf("\ntandoori roti\t\t4\t\t60.00");
+    printf("%s\t\t%d\t\t%.2f",item,qty,price);
     printf("bill body");
 }
 
