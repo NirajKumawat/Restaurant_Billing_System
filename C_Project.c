@@ -43,8 +43,8 @@ void billFooter(float sub_total){
     total=sub_total+(2*tax);
     printf("\n__________________________________________________");
     printf("\n Sub Total \t\t\t\t%.2f",sub_total);
-    printf("\n CGST@9 on %.2f \t\t\t%.2f",sub_total,tax);
-    printf("\n SGST@9 on %.2f \t\t\t%.2f",sub_total,tax);
+    printf("\n CGST@9 \t\t\t\t%.2f",tax);
+    printf("\n SGST@9 \t\t\t\t%.2f",tax);
     printf("\n Amount incl of all taxes \t\t%.2f\n",total);
 }
 
