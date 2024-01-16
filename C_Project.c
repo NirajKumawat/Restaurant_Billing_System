@@ -59,8 +59,8 @@ int main(){
     int num_of_items;
     struct Item item[30];
     float sub_total=0,total_incl_taxes=0;
+    
     printf("\n=================||XYZ RESTAURANT||===============\n");
-
     do{
         printf("\n\nSelect Your Operation :");
         printf("\n1.Generate Invoice ");
