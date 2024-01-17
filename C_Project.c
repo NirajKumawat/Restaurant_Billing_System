@@ -48,18 +48,19 @@ void billFooter(float sub_total){
     printf("\n Amount incl of all taxes \t\t%.2f\n",total);
 }
 
-struct Item{
+struct order{
     char itm[30];
     float qty;
     float price;
 };
 
 int main(){
-    int choice;
-    int num_of_items;
-    struct Item item[30];
+    struct order item[30];
+    int choice,num_of_items;
     float sub_total=0,total_incl_taxes=0;
-    
+    char save='y';
+    FILE *fptr;
+
     printf("\n=================||XYZ RESTAURANT||===============\n");
     do{
         printf("\n\nSelect Your Operation :");
@@ -71,6 +72,8 @@ int main(){
         scanf("%d",&choice);
         switch(choice){
             case(1):
+                system("clear");
+                sub_total=0;
                 printf("\nEnter the number of Items : ");
                 scanf("%d",&num_of_items);
 
@@ -94,6 +97,18 @@ int main(){
                     billBody(item[i].itm,item[i].qty,item[i].price);
                 }
                 billFooter(sub_total);
+                
+                printf("\nDo you want to save the invoice? [y/n] : ");
+                scanf("%s",&save);
+                if(save == 'y'){
+                    fptr = fopen("RestaurantBill.dat","a+");
+                    fwrite(&item,sizeof(struct order),1,fptr);
+                    if(fwrite != 0)
+                    printf("\nSuccessfully saved");
+                    else 
+                    printf("\nError saving");
+                    fclose(fptr);
+                }
 
             break;
             case(2)://search invoice
