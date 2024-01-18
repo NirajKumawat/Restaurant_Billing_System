@@ -3,9 +3,9 @@
 #include<stdlib.h>
 #include<time.h>
 
-void billHeader(char date[30]){//char name[50],char date[30]
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
+void billHeader(char date[50]){//char name[50],char date[30]
+    // time_t t = time(NULL);
+    // struct tm tm = *localtime(&t);
 
     printf("\n\n\t\tXYZ Restaurant");
     printf("\n\tG.T Road, Indore, Madhya Pradesh");
@@ -50,7 +50,7 @@ struct order{
     char itm[30];
     float qty;
     float price;
-    char date[30];
+    char _date[50];
 };
 
 int main(){
@@ -76,7 +76,7 @@ int main(){
                 printf("\nEnter the number of Items : ");
                 scanf("%d",&num_of_items);
 
-                strcpy(item.date,__DATE__);
+                strcpy(item->date,__DATE__);
 
                 for(int i=1;i<=num_of_items;i++){
                     fgetc(stdin);
@@ -93,7 +93,7 @@ int main(){
                     sub_total+=(item[i].qty*item[i].price);
                 }
 
-                billHeader(item.date);
+                billHeader(item->date);
                 for(int i=1;i<=num_of_items;i++){
                     billBody(item[i].itm,item[i].qty,item[i].price);
                 }
