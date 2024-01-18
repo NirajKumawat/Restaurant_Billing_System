@@ -10,7 +10,6 @@ void billHeader(char date[30],char name[30]){
     printf("\n__________________________________________________");
     printf("\nInvoice to: %s",name);
     printf("\tDate : %s",date);
-    // printf("\t\tDate : %02d/%02d/%02d %02d:%02d",tm.tm_mday,tm.tm_mon,tm.tm_year,tm.tm_hour,tm.tm_min);
     printf("\n__________________________________________________");
     printf("\n\tItem\t\t\tQty.\tPrice");
     printf("\n__________________________________________________");
@@ -126,10 +125,10 @@ int main(){
                 fgets(Search_name,50,stdin);
                 Search_name[strlen(Search_name)-1] = 0;
                 system("cls");
-                fptr = fopen("RestaurantBills.dat","r");
-                printf("\t==============|BILL of %s|==============",Search_name);
-                while(fread(&ord,sizeof(struct order),1,fptr)){
-                    if(!strcmp(ord.C_name,Search_name)){
+                fptr = fopen("RestaurantBills.con","r");
+                printf("\n==============|BILL of %s|==============\n",Search_name);
+                while(fread(&_ord,sizeof(struct order),1,fptr)){
+                    if(!strcmp(Search_name,_ord.C_name)){
                         billHeader(_ord.date,_ord.C_name);
                         for(int i=1;i<=_ord.num_of_items;i++){
                             billBody(_ord.item[i].itm,_ord.item[i].qty,_ord.item[i].price);
@@ -140,7 +139,7 @@ int main(){
 
                 }
                 if(!found){
-                    printf("The invoice for %s doesnot exists .",Search_name);
+                    printf("The invoice for %s does not exists .",Search_name);
                 }
                 fclose(fptr);
 
