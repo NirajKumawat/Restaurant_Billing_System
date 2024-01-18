@@ -109,7 +109,7 @@ int main(){
                 printf("\nDo you want to save the invoice? [y/n] : ");
                 scanf("%s",&save);
                 if(save == 'y'){
-                    fptr = fopen("RestaurantBills.con","a+");
+                    fptr = fopen("RestaurantBills.bin","a+");
                     fwrite(&ord,sizeof(struct order),1,fptr);
                     if(fwrite != 0)
                     printf("\nSuccessfully saved");
@@ -125,7 +125,7 @@ int main(){
                 fgets(Search_name,50,stdin);
                 Search_name[strlen(Search_name)-1] = 0;
                 system("cls");
-                fptr = fopen("RestaurantBills.con","r");
+                fptr = fopen("RestaurantBills.bin","r");
                 printf("\n==============|BILL of %s|==============\n",Search_name);
                 while(fread(&_ord,sizeof(struct order),1,fptr)){
                     if(!strcmp(Search_name,_ord.C_name)){
@@ -147,7 +147,7 @@ int main(){
             break;
             case(3)://show all invoice
                 system("cls");
-                fptr = fopen("RestaurantBills.con","r");
+                fptr = fopen("RestaurantBills.bin","r");
                 printf("\n==================||ALL BILLs||==================\n");
                 while(fread(&_ord,sizeof(struct order),1,fptr)){
                     billHeader(_ord.date,_ord.C_name);
