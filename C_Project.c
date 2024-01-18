@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<time.h>
 
-void billHeader(char date[50]){//char name[50],char date[30]
+void billHeader(char date[30],char bill_no){//char name[50],char date[30]
     // time_t t = time(NULL);
     // struct tm tm = *localtime(&t);
 
@@ -50,7 +50,6 @@ struct order{
     char itm[30];
     float qty;
     float price;
-    char _date[50];
 };
 
 int main(){
@@ -58,6 +57,7 @@ int main(){
     int choice,num_of_items;
     float sub_total=0,total_incl_taxes=0;
     char save='y';
+    char date[30];
     FILE *fptr;
 
     printf("\n=================||XYZ RESTAURANT||===============\n");
@@ -75,8 +75,7 @@ int main(){
                 sub_total=0;
                 printf("\nEnter the number of Items : ");
                 scanf("%d",&num_of_items);
-
-                strcpy(item->date,__DATE__);
+                strcpy(date,__DATE__);
 
                 for(int i=1;i<=num_of_items;i++){
                     fgetc(stdin);
@@ -93,7 +92,7 @@ int main(){
                     sub_total+=(item[i].qty*item[i].price);
                 }
 
-                billHeader(item->date);
+                billHeader(date);
                 for(int i=1;i<=num_of_items;i++){
                     billBody(item[i].itm,item[i].qty,item[i].price);
                 }
@@ -123,7 +122,7 @@ int main(){
                 printf("\n==================||ALL BILLs||==================\n");
                 while(fread(&item,sizeof(struct order),1,fptr)){
                     float tot = 0;
-                    billHeader();
+                    billHeader(date);
                     for(int i=1;i<=num_of_items;i++){
                         billBody(item[i].itm,item[i].qty,item[i].price);
                     }
