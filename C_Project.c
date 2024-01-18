@@ -3,16 +3,13 @@
 #include<stdlib.h>
 #include<time.h>
 
-void billHeader(char date[30],char bill_no){//char name[50],char date[30]
-    // time_t t = time(NULL);
-    // struct tm tm = *localtime(&t);
-
+void billHeader(char date[30],char name[30]){
     printf("\n\n\t\tXYZ Restaurant");
     printf("\n\tG.T Road, Indore, Madhya Pradesh");
     printf("\n\tPHONE NO : XXXXXX7461, XXXXXX9850");
     printf("\n__________________________________________________");
-    printf("\n Bill No. : ");
-    printf("\t\tDate : %s",date);
+    printf("\nInvoice to: %s",name);
+    printf("\tDate : %s",date);
     // printf("\t\tDate : %02d/%02d/%02d %02d:%02d",tm.tm_mday,tm.tm_mon,tm.tm_year,tm.tm_hour,tm.tm_min);
     printf("\n__________________________________________________");
     printf("\n\tItem\t\t\tQty.\tPrice");
@@ -46,18 +43,26 @@ void billFooter(float sub_total){
     printf("\n Amount incl of all taxes \t\t%.2f\n",total);
 }
 
-struct order{
+struct Item{
     char itm[30];
     float qty;
     float price;
 };
+struct order{
+    int choice;
+    int num_of_items;
+    float sub_total;
+    char date[50];
+    char C_name[50];
+    struct Item item[50];
+};
 
 int main(){
-    struct order item[30];
-    int choice,num_of_items;
-    float sub_total=0,total_incl_taxes=0;
+    struct order ord;
+    struct order _ord;
     char save='y';
-    char date[30];
+    char Search_name[50];
+    int found = 0;
     FILE *fptr;
 
     printf("\n=================||XYZ RESTAURANT||===============\n");
@@ -68,41 +73,45 @@ int main(){
         printf("\n3.Show all Invoice ");
         printf("\n4.Exit \n");
         printf("\nEnter Your Choice : ");
-        scanf("%d",&choice);
-        switch(choice){
+        scanf("%d",&ord.choice);
+        switch(ord.choice){
             case(1)://Generate Invoice
                 system("cls");
-                sub_total=0;
+                ord.sub_total=0;
+                printf("\nEnter the Name of the Customer : ");
+                fgetc(stdin);
+                fgets(ord.C_name,50,stdin);
+                ord.C_name[strlen(ord.C_name)-1]=0;
                 printf("\nEnter the number of Items : ");
-                scanf("%d",&num_of_items);
-                strcpy(date,__DATE__);
+                scanf("%d",&ord.num_of_items);
+                strcpy(ord.date,__DATE__);
 
-                for(int i=1;i<=num_of_items;i++){
+                for(int i=1;i<=ord.num_of_items;i++){
                     fgetc(stdin);
                     printf("\n\nEnter the name of Item %d : ",i);
-                    fgets(item[i].itm,30,stdin);
-                    item[i].itm[strlen(item[i].itm)-1] = 0;
+                    fgets(ord.item[i].itm,30,stdin);
+                    ord.item[i].itm[strlen(ord.item[i].itm)-1] = 0;
 
                     printf("Enter the quantity of Item : ");
-                    scanf("%f",&item[i].qty);
+                    scanf("%f",&ord.item[i].qty);
 
                     printf("Enter the price of Item : ");
-                    scanf("%f",&item[i].price);
+                    scanf("%f",&ord.item[i].price);
 
-                    sub_total+=(item[i].qty*item[i].price);
+                    ord.sub_total+=(ord.item[i].qty*ord.item[i].price);
                 }
 
-                billHeader(date);
-                for(int i=1;i<=num_of_items;i++){
-                    billBody(item[i].itm,item[i].qty,item[i].price);
+                billHeader(ord.date,ord.C_name);
+                for(int i=1;i<=ord.num_of_items;i++){
+                    billBody(ord.item[i].itm,ord.item[i].qty,ord.item[i].price);
                 }
-                billFooter(sub_total);
+                billFooter(ord.sub_total);
                 
                 printf("\nDo you want to save the invoice? [y/n] : ");
                 scanf("%s",&save);
                 if(save == 'y'){
-                    fptr = fopen("RestaurantBills.txt","a+");
-                    fwrite(&item,sizeof(struct order),1,fptr);
+                    fptr = fopen("RestaurantBills.con","a+");
+                    fwrite(&ord,sizeof(struct order),1,fptr);
                     if(fwrite != 0)
                     printf("\nSuccessfully saved");
                     else 
@@ -112,21 +121,41 @@ int main(){
 
             break;
             case(2)://Search Invoice
-            printf("%.2f",item[1].price);
+                printf("Enter the name of the Customer : ");
+                fgetc(stdin);
+                fgets(Search_name,50,stdin);
+                Search_name[strlen(Search_name)-1] = 0;
+                system("cls");
+                fptr = fopen("RestaurantBills.dat","r");
+                printf("\t==============|BILL of %s|==============",Search_name);
+                while(fread(&ord,sizeof(struct order),1,fptr)){
+                    if(!strcmp(ord.C_name,Search_name)){
+                        billHeader(_ord.date,_ord.C_name);
+                        for(int i=1;i<=_ord.num_of_items;i++){
+                            billBody(_ord.item[i].itm,_ord.item[i].qty,_ord.item[i].price);
+                        }
+                        billFooter(_ord.sub_total);
+                        found = 1;
+                    }
+
+                }
+                if(!found){
+                    printf("The invoice for %s doesnot exists .",Search_name);
+                }
+                fclose(fptr);
 
 
             break;
             case(3)://show all invoice
                 system("cls");
-                fptr = fopen("RestaurantBills.txt","r");
+                fptr = fopen("RestaurantBills.con","r");
                 printf("\n==================||ALL BILLs||==================\n");
-                while(fread(&item,sizeof(struct order),1,fptr)){
-                    float tot = 0;
-                    billHeader(date);
-                    for(int i=1;i<=num_of_items;i++){
-                        billBody(item[i].itm,item[i].qty,item[i].price);
+                while(fread(&_ord,sizeof(struct order),1,fptr)){
+                    billHeader(_ord.date,_ord.C_name);
+                    for(int i=1;i<=_ord.num_of_items;i++){
+                        billBody(_ord.item[i].itm,_ord.item[i].qty,_ord.item[i].price);
                     }
-                    billFooter(sub_total);
+                    billFooter(_ord.sub_total);
                 }
                 fclose(fptr);
 
@@ -135,6 +164,6 @@ int main(){
             break;
             default:printf("you entered wrong choice!");
         }
-    }while(choice!=4);
+    }while(ord.choice!=4);
 }
 
