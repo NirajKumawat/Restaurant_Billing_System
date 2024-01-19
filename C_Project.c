@@ -164,5 +164,6 @@ int main(){
             default:printf("you entered wrong choice!");
         }
     }while(ord.choice!=4);
+    //add operation repeating question
 }
 
